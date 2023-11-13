@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>OpenCV.js</title>
+  <!-- load tesseract.js v5 -->
+  <script src='https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js'></script>
+  <style>
+    .ocrResults {
+      border: 1px outset #838383;
+    }
+  </style>
+</head>
+
+<body>
+  <div>
+    <div class="inputoutput">
+      <img id="imageSrc" alt="No Image" /><!-- image source -->
+      <p><b>ocr output before OCV:</b></p>
+      <div class= ocrResults id="ocrOutputBefore">no ocr results</div>
+      <p></p>
+      <div class="caption">imageSrc
+        <input type="file" id="fileInput" name="file" /><!-- image data file -->
+      </div>
+    </div>
+    <hr>
+    <div class="inputoutput">
+      <canvas id="canvasOutput"></canvas><!--display img after ocv-->
+      <p><b>ocr output after OCV:</b></p>
+      <div class= ocrResults id="ocrOutputAfter">no ocr results</div>
+      <p></p>
+    </div>
+  </div>
+
+  <hr>
+
+  <b>status</b>
+  <p id="status">OpenCV.js is loading...</p>
+  <p id="statusTess">Tesseract CDN offline</p>
+
+  <script src="script.js" type="text/javascript"></script>
+  <script async src="opencv.js" type="text/javascript"></script>
+  <script src="ocr.js"></script>
+
+  <!-- use tesseract.js v5 -->
+  <script>
+    const ocrResultBeforeOCV = document.getElementById("ocrOutputBefore");
+    const ocrResultAfterOCV = document.getElementById("ocrOutputAfter");
+  
+    function ocrService(img, destination) {
+      console.log("ocrservice is called");
+
+      // OCR 
+      (async () => {
+        const worker = await Tesseract.createWorker('deu'); //default: 'eng', math: 'equ'
+        const ret = await worker.recognize(img);
+        //console.log(ret.data.text);
+        destination.innerText = ret.data.text;
+        await worker.terminate();
+      })();
+    }
+
+    // Function to check and log the connection status
+    function checkCDNConnectivity() {
+      if (navigator.onLine) {
+        document.getElementById("statusTess").innerHTML = "Tesseract CDN connected.";
+        console.log("Server connected");
+      }
+      else {
+        console.log("CDN offline");
+      }
+    }
+
+    // Initial check when the page loads
+    checkCDNConnectivity();
+
+    // Event listener for online/offline events
+    window.addEventListener('online', checkCDNConnectivity);
+    window.addEventListener('offline', checkCDNConnectivity);
+
+
+  </script>
+</body>
+
+</html>
