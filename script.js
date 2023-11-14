@@ -61,7 +61,7 @@ imgElement.onload = function readAndShowImageWithOCV() {
 
     //HORIZONTAL morphology op.
     let horizontal = bin.clone();
-    let hSize = mat.cols / 10
+    let hSize = mat.cols / 1
     let hKernel = cv.getStructuringElement(cv.MORPH_RECT, new cv.Size(hSize, 1));
 
     cv.erode(horizontal, horizontal, hKernel, new cv.Point(-1, -1));
@@ -69,7 +69,7 @@ imgElement.onload = function readAndShowImageWithOCV() {
 
     //VERTICAL morphology op.
     let vertical = bin.clone();
-    let vSize = mat.rows / 10
+    let vSize = mat.rows / 1
     let vKernel = cv.getStructuringElement(cv.MORPH_RECT, new cv.Size(1, vSize));
 
     cv.erode(vertical, vertical, vKernel, new cv.Point(-1, -1));
